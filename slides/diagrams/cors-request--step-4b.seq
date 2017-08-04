@@ -1,0 +1,10 @@
+sequenceDiagram
+    participant Client
+    participant Browser
+    participant Server
+    Client->>Browser: Make XHR Request
+    Browser-->>Server: Preflight request
+    Server-->>Browser: Respond with Access-Control-* headers
+    Note over Browser,Server: Access-Control-Allow-Origin header includes the Client's origin, or its value is '*'
+    Browser->>Server: Allow POST request through to server
+    Server->>Client: Process and respond to request

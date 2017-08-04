@@ -1,0 +1,7 @@
+sequenceDiagram
+    participant Client
+    participant Browser
+    participant Server
+    Client->>Browser: Make XHR Request
+    Browser-->>Server: Preflight request
+    Note over Browser,Server: Browser sends OPTIONS request containing an Origin header with the client's origin

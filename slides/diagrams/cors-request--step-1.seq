@@ -1,0 +1,6 @@
+sequenceDiagram
+    participant Client
+    participant Browser
+    participant Server
+    Client->>Browser: Make XHR Request
+    Note over Client,Browser: Client attempts to POST data to an endpoint on the Server.

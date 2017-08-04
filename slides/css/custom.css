@@ -1,0 +1,72 @@
+.text-right {
+    text-align: right;
+}
+
+.faded {
+    opacity: 0.5;
+}
+
+ul.emphasize li {
+    opacity: 0.5;
+}
+
+ul.emphasize li.active {
+    opacity: 1.0;
+}
+
+.reveal dl {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+}
+
+.reveal dl dt {
+    flex: 0 0 20%;
+    margin-top: 5px;
+}
+
+.reveal dl dd {
+    flex: 80% 0 0;
+    margin-left: 0;
+    margin-top: 5px;
+}
+
+.fragment-container {
+    position: relative;
+}
+
+.fragment-container > .fragment {
+    opacity: 0;
+}
+
+.fragment-container > .fragment.current-fragment {
+    bottom: 0;
+    left: 0;
+    opacity: 1.0;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+.table-50-50 {
+    table-layout: fixed;
+    width: 100%;
+}
+
+.table-50-50 th,
+.table-50-50 td {
+    max-width: calc(50% - 1em);
+    width: calc(50% - 1em);
+}
+
+tr.fragment td {
+    border-bottom-width: 0;
+}
+
+tr.fragment.visible td {
+    border-bottom-width: 1px;
+}
+
+tr.fragment.visible:last-child td {
+    border-bottom-width: 0;
+}

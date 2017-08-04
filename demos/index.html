@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="/bower/tether/dist/css/tether.min.css">
+    <link rel="stylesheet" href="/bower/tether/dist/css/tether-theme-basic.min.css">
+    <link rel="stylesheet" href="/bower/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/site.css">
+</head>
+<body>
+<div class="container">
+    <h1>CORS Demystified</h1>
+    <p class="lead">Demos to show different types of cross-origin requests and responses.</p>
+
+    <ul id="page-tabs" class="nav nav-tabs" role="tablist">
+        <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#request-content" role="tab">Request</a></li>
+        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#response-content" role="tab">Response</a></li>
+    </ul>
+
+    <div class="tab-content mt-3">
+        <div class="tab-pane active" id="request-content" role="tabpanel">
+            <div class="row">
+                <div class="col-6">
+                    <form>
+                        <div class="form-check">
+                            <label class="custom-control custom-radio">
+                                <input type="radio" class="custom-control-input" name="cors-request" value="same-origin" checked>
+                                <span class="custom-control-indicator"></span>
+                                <span class="custom-control-description">Same-origin</span>
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <label class="custom-control custom-radio">
+                                <input type="radio" class="custom-control-input" name="cors-request" value="cors-not-enabled">
+                                <span class="custom-control-indicator"></span>
+                                <span class="custom-control-description">Cross-origin: CORS not enabled on server</span>
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <label class="custom-control custom-radio">
+                                <input type="radio" class="custom-control-input" name="cors-request" value="o1-not-allowed">
+                                <span class="custom-control-indicator"></span>
+                                <span class="custom-control-description">Cross-origin: Client origin not in <kbd>Allow-Origin</kbd> header</span>
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <label class="custom-control custom-radio">
+                                <input type="radio" class="custom-control-input" name="cors-request" value="o1-allowed">
+                                <span class="custom-control-indicator"></span>
+                                <span class="custom-control-description">Cross-origin: Client origin in <kbd>Allow-Origin</kbd> header</span>
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <label class="custom-control custom-radio">
+                                <input type="radio" class="custom-control-input" name="cors-request" value="non-standard-headers">
+                                <span class="custom-control-indicator"></span>
+                                <span class="custom-control-description">Cross-origin, non-standard headers</span>
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <label class="custom-control custom-radio">
+                                <input type="radio" class="custom-control-input" name="cors-request" value="credentials-disallowed">
+                                <span class="custom-control-indicator"></span>
+                                <span class="custom-control-description">Cross-origin, with credentials: <kbd>Allow-Credentials</kbd> is <code>false</code></span>
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <label class="custom-control custom-radio">
+                                <input type="radio" class="custom-control-input" name="cors-request" value="credentials-allowed">
+                                <span class="custom-control-indicator"></span>
+                                <span class="custom-control-description">Cross-origin, with credentials: <kbd>Allow-Credentials</kbd> is <code>true</code></span>
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <label class="custom-control custom-radio">
+                                <input type="radio" class="custom-control-input" name="cors-request" value="basic-auth-header-valid">
+                                <span class="custom-control-indicator"></span>
+                                <span class="custom-control-description">Cross-origin, Basic Authorization (valid user)</span>
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <label class="custom-control custom-radio">
+                                <input type="radio" class="custom-control-input" name="cors-request" value="basic-auth-header-invalid">
+                                <span class="custom-control-indicator"></span>
+                                <span class="custom-control-description">Cross-origin, Basic Authorization (invalid user)</span>
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <label class="custom-control custom-radio">
+                                <input type="radio" class="custom-control-input" name="cors-request" value="basic-auth-header-missing">
+                                <span class="custom-control-indicator"></span>
+                                <span class="custom-control-description">Cross-origin, Basic Authorization (missing header)</span>
+                            </label>
+                        </div>
+                        <button id="send-request" class="btn btn-primary">Send Request</button>
+                    </form>
+                </div>
+                <div class="col-6">
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#xhr-opts" role="tab">XHR Options</a></li>
+                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#cors-config" role="tab">CORS Config</a></li>
+                    </ul>
+
+                    <div class="card">
+                        <div class="card-block">
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="xhr-opts" role="tabpanel">
+                                    <pre class="mb-0"><code id="xhr-code-block"></code></pre>
+                                </div>
+                                <div class="tab-pane" id="cors-config" role="tabpanel">
+                                    <pre class="mb-0"><code id="cors-code-block"></code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-pane" id="response-content" role="tabpanel">
+            <div class="row">
+                <div class="col-12">
+                    <h6>Status: <span id="response-status">n/a</span></h6>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="card">
+                                <div class="card-header">Data/Error</div>
+                                <div class="card-block"><pre class="mb-0"><code id="response-data-block"></code></pre></div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="card">
+                                <div class="card-header">XHR Object</div>
+                                <div class="card-block"><pre class="mb-0"><code id="response-xhr-block"></code></pre></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/bower/jquery/dist/jquery.min.js"></script>
+<script src="/bower/lodash/dist/lodash.min.js"></script>
+<script src="/bower/tether/dist/js/tether.min.js"></script>
+<script src="/bower/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="/static/site.js"></script>
+</body>
+</html>
