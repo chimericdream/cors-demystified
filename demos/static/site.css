@@ -1,0 +1,18 @@
+body {
+    padding: 2rem;
+}
+
+.row {
+    margin-bottom: 1rem;
+}
+
+.row .row {
+    margin-top: 1rem;
+    margin-bottom: 0;
+}
+
+.nav-tabs + .card {
+    border-top-width: 0;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}

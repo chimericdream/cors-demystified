@@ -1,0 +1,32 @@
+{
+  "name": "@chimericdream/slide-deck-cors-demystified",
+  "version": "1.0.0",
+  "private": "true",
+  "description": "Slide deck for \"CORS Demystified: It's Simpler Than You Think\", built using reveal.js.",
+  "homepage": "https://github.com/chimericdream/cors-demystified",
+  "main": "server.js",
+  "author": {
+    "name": "Bill Parrott",
+    "email": "bill@chimericdream.com",
+    "web": "http://chimericdream.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/chimericdream/cors-demystified.git"
+  },
+  "engines": {
+    "node": ">=4.0.0"
+  },
+  "devDependencies": {
+    "body-parser": "^1.17.2",
+    "cors": "^2.8.4",
+    "express": "~4.14.0",
+    "express-basic-auth": "^1.1.1",
+    "mustache": "~2.2.1",
+    "node-sass": "~3.13.0",
+    "serve-favicon": "2.4.3",
+    "serve-static": "^1.12.3",
+    "socket.io": "^1.4.8"
+  },
+  "license": "MIT"
+}

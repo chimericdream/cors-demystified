@@ -1,0 +1,802 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title>CORS Demystified: It's Simpler Than You Think</title>
+
+    <link rel="stylesheet" href="/css/reveal.css">
+    <link rel="stylesheet" href="/css/theme-moon.css">
+    <link rel="stylesheet" href="/css/custom.css">
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="/lib/css/zenburn.css">
+</head>
+<body>
+<div class="reveal">
+    <div class="slides">
+        <section>
+            <h1>CORS Demystified</h1>
+            <h3>It's Simpler Than You Think</h3>
+            <p>
+                <small>By <a href="http://chimericdream.com">Bill Parrott</a> / <a href="http://twitter.com/chimericdream">@chimericdream</a></small>
+            </p>
+        </section>
+
+
+        <section>
+            <h2>Sponsor shout out</h2>
+            <img class="stretch" src="/images/sponsors.png">
+
+            <aside class="notes">
+                Thanks to the sponsors for making this event awesome and keeping ticket prices low.
+            </aside>
+        </section>
+
+
+        <section>
+            <h2>Who am I?</h2>
+            <ul>
+                <li>Software Engineer at Spring Venture Group</li>
+                <li>Professional Web Developer for 10 years</li>
+                <li>Web Tinkerer for 20+ years</li>
+            </ul>
+
+            <aside class="notes">
+                In addition to these, I am also married with a 3-year-old, so that alone makes me an expert on &quot;sharing&quot; of all kinds.
+            </aside>
+        </section>
+
+
+        <section>
+            <section>
+                <h2>Who is this talk for?</h2>
+
+                <aside class="notes">
+                    <ul>
+                        <li>Can I get a show of hands from anyone who has spent hours, or even days, fighting a CORS issue?</li>
+                        <li>How many of you wound up figuring out the issue, only for it to be some silly thing?</li>
+                    </ul>
+                </aside>
+            </section>
+            <section>
+                <h2>This talk is for you</h2>
+                <img class="stretch" src="/images/stock/AdobeStock_87578890.jpeg">
+                <p><small>Source: <a href="https://stock.adobe.com/stock-photo/mad/87578890">Adobe Stock Photo</a></small></p>
+
+                <aside class="notes">
+                </aside>
+            </section>
+            <section>
+                <h2>And you</h2>
+                <img class="stretch" src="/images/stock/AdobeStock_53205869.jpeg">
+                <p><small>Source: <a href="https://stock.adobe.com/stock-photo/annoyed-designer-gesturing-in-front-of-her-laptop/53205869">Adobe Stock Photo</a></small></p>
+
+                <aside class="notes">
+                </aside>
+            </section>
+        </section>
+        <section>
+            <h2>This talk is for...</h2>
+            <ul>
+                <li class="fragment">Front end developers who want to better understand what happens behind the scenes when they call <code>new XMLHttpRequest()</code> or <code>$.ajax(...)</code></li>
+                <li class="fragment">API developers who want to better understand the ways in which CORS can be configured and the common scenarios for each</li>
+                <li class="fragment">Anyone who thinks reading documentation and the HTTP specification is "fun"</li>
+            </ul>
+
+            <aside class="notes">
+                <p>Front-end developers who are tired of copy/pasting code and trying to figure out why it doesn't &quot;just work&quot;</p>
+                <p>API developers want to ensure their services are set up appropriately for their purposes.</p>
+                <p>Those strange people who enjoy reading documentation.</p>
+            </aside>
+        </section>
+
+
+        <section>
+            <section data-transition="slide-in fade-out">
+                <h2>Topics we'll cover</h2>
+                <ul>
+                    <li>What is CORS?</li>
+                    <li>A brief history of CORS</li>
+                    <li>Common use cases</li>
+                    <li>How CORS works</li>
+                    <li>CORS vs JSON-P</li>
+                    <li>When CORS isn't the answer</li>
+                </ul>
+
+                <aside class="notes">
+                    Here is a quick summary of what I will be talking about over the next hour or so.
+                </aside>
+            </section>
+            <section data-transition="fade-in fade-out">
+                <h2>Topics we'll cover</h2>
+                <ul class="emphasize">
+                    <li class="active">What is CORS?</li>
+                    <li>A brief history of CORS</li>
+                    <li>Common use cases</li>
+                    <li>How CORS works</li>
+                    <li>CORS vs JSON-P</li>
+                    <li>When CORS isn't the answer</li>
+                </ul>
+
+                <aside class="notes">
+                    First, I'll explain what CORS is from a conceptual and practical standpoint.
+                </aside>
+            </section>
+            <section data-transition="fade-in fade-out">
+                <h2>Topics we'll cover</h2>
+                <ul class="emphasize">
+                    <li>What is CORS?</li>
+                    <li class="active">A brief history of CORS</li>
+                    <li>Common use cases</li>
+                    <li>How CORS works</li>
+                    <li>CORS vs JSON-P</li>
+                    <li>When CORS isn't the answer</li>
+                </ul>
+
+                <aside class="notes">
+                    After that, we'll look at how CORS began, and how it became the thing we all love to hate today.
+                </aside>
+            </section>
+            <section data-transition="fade-in fade-out">
+                <h2>Topics we'll cover</h2>
+                <ul class="emphasize">
+                    <li>What is CORS?</li>
+                    <li>A brief history of CORS</li>
+                    <li class="active">Common use cases</li>
+                    <li>How CORS works</li>
+                    <li>CORS vs JSON-P</li>
+                    <li>When CORS isn't the answer</li>
+                </ul>
+
+                <aside class="notes">
+                    Next, I will talk about some ways in which CORS is already part of your setup.
+                </aside>
+            </section>
+            <section data-transition="fade-in fade-out">
+                <h2>Topics we'll cover</h2>
+                <ul class="emphasize">
+                    <li>What is CORS?</li>
+                    <li>A brief history of CORS</li>
+                    <li>Common use cases</li>
+                    <li class="active">How CORS works</li>
+                    <li>CORS vs JSON-P</li>
+                    <li>When CORS isn't the answer</li>
+                </ul>
+
+                <aside class="notes">
+                    The next part of the talk is where we will jump in and get our hands dirty. I'll talk about the various moving pieces within a CORS request, and we will take a look at some real (if contrived) demonstrations of CORS requests in action.
+                </aside>
+            </section>
+            <section data-transition="fade-in fade-out">
+                <h2>Topics we'll cover</h2>
+                <ul class="emphasize">
+                    <li>What is CORS?</li>
+                    <li>A brief history of CORS</li>
+                    <li>Common use cases</li>
+                    <li>How CORS works</li>
+                    <li class="active">CORS vs JSON-P</li>
+                    <li>When CORS isn't the answer</li>
+                </ul>
+
+                <aside class="notes">
+                    Then we will lighten things up a bit and break down some important differences between CORS and JSON-P, a commonly suggested alternative.
+                </aside>
+            </section>
+            <section data-transition="fade-in slide-out">
+                <h2>Topics we'll cover</h2>
+                <ul class="emphasize">
+                    <li>What is CORS?</li>
+                    <li>A brief history of CORS</li>
+                    <li>Common use cases</li>
+                    <li>How CORS works</li>
+                    <li>CORS vs JSON-P</li>
+                    <li class="active">When CORS isn't the answer</li>
+                </ul>
+
+                <aside class="notes">
+                    Finally, I'll describe a few scenarios in which CORS may not be appropriate, or even possible, to use.
+                </aside>
+            </section>
+        </section>
+
+
+        <section><h2>What is CORS?</h2></section>
+        <section>
+            <h2>CORS is...</h2>
+            <section>
+                <!-- Deliberately empty -->
+            </section>
+            <section>
+                <h3>Deceptively easy to summarize</h3>
+                <p class="fragment" data-fragment-index="1"><q>&quot;Cross-origin resource sharing (CORS) is a mechanism that allows restricted resources (e.g. fonts) on a web page to be requested from another domain outside the domain from which the first resource was served.&quot;</q></p>
+                <p class="fragment" data-fragment-index="1"><small>Source: <a href="https://en.wikipedia.org/wiki/Cross-origin_resource_sharing">Wikipedia</a></small></p>
+
+                <aside class="notes">
+                    <p>CORS, or Cross-Origin Resource Sharing is a mechanism that allows restricted resources, such as fonts, on a web server to be requested from another domain outside the domain from which the first resource was served.</p>
+                    <p>This is easy enough to understand, but it doesn't cover things like passing custom headers, accessing resources which require authentication, and more.</p>
+                </aside>
+            </section>
+            <section>
+                <h3>Easy to misunderstand</h3>
+                <p class="fragment" data-fragment-index="1"><q>&quot;Normcore truffaut waistcoat hexagon master cleanse. Slow-carb leggings whatever, flexitarian tumblr meh 8-bit unicorn franzen etsy wolf. Kombucha wayfarers dreamcatcher hella waistcoat, freegan photo booth bushwick shaman literally flannel synth.&quot;</q></p>
+                <p class="fragment" data-fragment-index="1"><small>Source: <a href="https://hipsum.co/?paras=1&type=hipster-centric">Hipster Ipsum</a></small></p>
+
+                <aside class="notes">
+                    After you spend some time reading and re-reading the CORS specification, as well as countless well-meaning (but plain wrong) tutorials, CORS can easily morph into something impossible to understand.
+                </aside>
+            </section>
+            <section>
+                <h3>A pain in the rear</h3>
+                <p class="fragment" data-fragment-index="1"><q>&quot;CORS? Oh my god, I <em>hate</em> dealing with CORS issues.&quot;</q></p>
+                <p class="fragment" data-fragment-index="1"><small>Source: Every web developer ever</small></p>
+
+                <aside class="notes">
+                    As any front-end or back-end developer will tell you, debugging CORS errors can be a giant pain.
+                </aside>
+            </section>
+            <section>
+                <h3>Better described as a behavior than a tool or technology</h3>
+                <p class="fragment">Cross-origin resource sharing is what happens when JavaScript code on one website asks another site for a thing.</p>
+
+                <aside class="notes">
+                    CORS isn't necessarily something that you <em>use</em>. Rather, it is more accurate to say that CORS <em>happens</em>.
+                </aside>
+            </section>
+        </section>
+
+
+        <section><h2>A brief history of CORS</h2></section>
+        <section>
+            <h2>Yet Another Origin Story</h2>
+            <dl>
+                <dt class="fragment" data-fragment-index="1">2004</dt>
+                <dd class="fragment" data-fragment-index="1">Proposed for VoiceXML browsers to allow safe cross-origin requests</dd>
+                <dt class="fragment" data-fragment-index="2">2005</dt>
+                <dd class="fragment" data-fragment-index="2">Separated into its own specification (NOTE) for general use beyond VoiceXML</dd>
+                <dt class="fragment" data-fragment-index="3">2006</dt>
+                <dd class="fragment" data-fragment-index="3">First W3C Working Draft submitted</dd>
+                <dt class="fragment" data-fragment-index="4">2009</dt>
+                <dd class="fragment" data-fragment-index="4">Renamed Cross-Origin Resource Sharing</dd>
+                <dt class="fragment" data-fragment-index="5">2014</dt>
+                <dd class="fragment" data-fragment-index="5">Accepted as a W3C recommendation</dd>
+            </dl>
+
+            <aside class="notes">
+                <ul>
+                    <li>In 2004, proposed for use in VoiceXML, which is primarily used in things like voice response systems.</li>
+                    <li>Quickly determined that it had broader application than just VoiceXML</li>
+                </ul>
+            </aside>
+        </section>
+        <section>
+            <h2>2014? So it's pretty new, for a web thing.</h2>
+            <h3 class="fragment">No, and yes</h3>
+
+            <aside class="notes">
+                <p>IE 8 and IE 9 had limited support as far back as 2009, and IE 10+/Edge have supported it since 2012</p>
+                <p>The rest of the major browsers have had full support since basically the beginning</p>
+            </aside>
+        </section>
+
+
+        <section>
+            <h2>Common use cases</h2>
+            <h3 class="fragment">(You're probably already doing most of these)</h3>
+        </section>
+        <section>
+            <h2>Common use cases</h2>
+            <ul>
+                <li class="fragment">Building/consuming APIs</li>
+                <li class="fragment">Access protected resources (i.e. endpoints/data requiring authentication)</li>
+                <li class="fragment">Serving content from a CDN</li>
+                <li class="fragment">Ads/Analytics</li>
+            </ul>
+
+            <aside class="notes">
+                <p>In short, the most common situations in which CORS comes into play could be summarized as &quot;building something for the web&quot;</p>
+            </aside>
+        </section>
+
+
+        <section>
+            <h2>How CORS works</h2>
+            <h3>Breaking it down</h3>
+
+            <aside class="notes">
+                Now is when the real fun begins. Before we head down the rabbit hole, are there any questions so far?
+            </aside>
+        </section>
+        <section>
+            <h2>A couple important notes</h2>
+            <section>
+                <p><code>Client != Browser</code></p>
+
+                <aside class="notes">
+                    <p>In web development today, we generally lump both the end-user's browser and the JavaScript code running on the front-end together under the umbrella of &quot;client&quot;</p>
+                    <p>When it comes to CORS, one of the most important distinctions you can make is separate the JavaScript code from the browser.</p>
+                    <p>During a CORS request, the browser performs some steps independent of (and transparent to) the JavaScript code. More on this shortly.</p>
+                </aside>
+            </section>
+            <section>
+                <p>CORS is mostly passive.</p>
+                <p class="fragment">It's all about configuration.</p>
+
+                <aside class="notes">
+                    <p>Perhaps one of the easiest stumbling blocks to trip you up is this. CORS is essentially a series of flags and switches</p>
+                </aside>
+            </section>
+        </section>
+        <section>
+            <section data-transition="slide-in fade-out">
+                <h2>Anatomy of a CORS request</h2>
+                <ul>
+                    <li>Origin</li>
+                    <li>Request headers</li>
+                    <li>Response headers</li>
+                    <li>Pre-flight request</li>
+                    <li>XMLHttpRequest object</li>
+                </ul>
+            </section>
+            <section data-transition="fade-in slide-out">
+                <h2>Anatomy of a CORS request</h2>
+                <ul class="emphasize">
+                    <li class="active">Origin</li>
+                    <li>Request headers</li>
+                    <li>Response headers</li>
+                    <li>Pre-flight request</li>
+                    <li>XMLHttpRequest object</li>
+                </ul>
+            </section>
+        </section>
+        <section>
+            <h2>What is an origin?</h2>
+            <section data-transition="slide-in fade-out">
+                <p><code>https://www.somewebsite.com:1234/</code></p>
+
+                <aside class="notes">
+                    <p>First thing first, what the hell is an origin? Is it a domain, a website, what?</p>
+                    <p>An origin is made up of everything in a URL up to (but not including) the request path.</p>
+                </aside>
+            </section>
+            <section data-transition="fade-in fade-out">
+                <p><code><strong>https</strong><span class="faded">://www.somewebsite.com:1234/</span></code></p>
+            </section>
+            <section data-transition="fade-in fade-out">
+                <p><code><span class="faded">https://</span><strong>www.somewebsite.com</strong><span class="faded">:1234/</span></code></p>
+            </section>
+            <section data-transition="fade-in slide-out">
+                <p><code><span class="faded">https://www.somewebsite.com:</span><strong>1234</strong><span class="faded">/</span></code></p>
+            </section>
+        </section>
+        <section>
+            <h2>Anatomy of a CORS request</h2>
+            <ul class="emphasize">
+                <li>Origin</li>
+                <li class="active">Request headers</li>
+                <li>Response headers</li>
+                <li>Pre-flight request</li>
+                <li>XMLHttpRequest object</li>
+            </ul>
+        </section>
+        <section>
+            <h2>CORS request headers</h2>
+            <section data-transition="slide-in fade-out">
+                <h3><code>Origin</code></h3>
+                <p>The origin of the client making the request</p>
+            </section>
+            <section data-transition="fade-in fade-out">
+                <h3><code>Access-Control-Request-Method</code></h3>
+                <p>The HTTP method (e.g. GET, POST, etc) the client is trying to use</p>
+            </section>
+            <section data-transition="fade-in slide-out">
+                <h3><code>Access-Control-Request-Headers</code></h3>
+                <p>A list of the headers to be sent from the client as part of the request</p>
+            </section>
+        </section>
+        <section>
+            <h2>Anatomy of a CORS request</h2>
+            <ul class="emphasize">
+                <li>Origin</li>
+                <li>Request headers</li>
+                <li class="active">Response headers</li>
+                <li>Pre-flight request</li>
+                <li>XMLHttpRequest object</li>
+            </ul>
+        </section>
+        <section>
+            <h2>CORS response headers</h2>
+            <section data-transition="slide-in fade-out">
+                <h3><code>Access-Control-Allow-Origin</code></h3>
+                <p>Either <code>*</code> or a list of origins allowed to make CORS requests to the destination</p>
+
+                <aside class="notes">
+                    <p>If you are developing an API designed to be used by any arbitrary web application, you will likely want to set this header's value to &quot;*&quot;</p>
+                </aside>
+            </section>
+            <section data-transition="fade-in fade-out">
+                <h3><code>Access-Control-Allow-Credentials</code></h3>
+                <p>Whether or not the browser may send credentials (Auth header, cookies, etc) with the request</p>
+
+                <aside class="notes">
+                    <p>If this header is set to <code>true</code>, then the <code>Access-Control-Allow-Origin</code> header <em>cannot</em> be &quot;*&quot;.</p>
+                    <p>If you need to allow all origins <em>and</em> credentials, your web server should be configured to reflect the request's <code>Origin</code> header in the <code>Access-Control-Allow-Origin</code> header of the response.</p>
+                </aside>
+            </section>
+            <section data-transition="fade-in fade-out">
+                <h3><code>Access-Control-Expose-Headers</code></h3>
+                <p>A list of headers which may be sent to the client with the response to the CORS request</p>
+            </section>
+            <section data-transition="fade-in fade-out">
+                <h3><code>Access-Control-Max-Age</code></h3>
+                <p>The length of time the browser may cache the response to the pre-flight request</p>
+            </section>
+            <section data-transition="fade-in fade-out">
+                <h3><code>Access-Control-Allow-Methods</code></h3>
+                <p>A list of HTTP methods (e.g. GET, POST, etc) which may be used for cross-origin requests</p>
+            </section>
+            <section data-transition="fade-in slide-out">
+                <h3><code>Access-Control-Allow-Headers</code></h3>
+                <p>A list of headers which may be sent by the client with the request</p>
+            </section>
+        </section>
+        <section>
+            <h2>Anatomy of a CORS request</h2>
+            <ul class="emphasize">
+                <li>Origin</li>
+                <li>Request headers</li>
+                <li>Response headers</li>
+                <li class="active">Pre-flight request</li>
+                <li>XMLHttpRequest object</li>
+            </ul>
+        </section>
+        <section>
+            <h2>The pre-flight (<code>OPTIONS</code>) request</h2>
+            <ul>
+                <li class="fragment">Sent by the browser</li>
+                <li class="fragment">Includes <code>Origin</code>, <code>Access-Control-Request-Method</code>, and <code>Access-Control-Request-Headers</code> headers</li>
+                <li class="fragment">Transparent to the client</li>
+                <li class="fragment">Server's response determines whether the browser rejects or sends the client's original request</li>
+            </ul>
+        </section>
+        <section>
+            <h2>Anatomy of a CORS request</h2>
+            <ul class="emphasize">
+                <li>Origin</li>
+                <li>Request headers</li>
+                <li>Response headers</li>
+                <li>Pre-flight request</li>
+                <li class="active">XMLHttpRequest object</li>
+            </ul>
+        </section>
+        <section>
+            <section>
+                <h2>The XMLHttpRequest (XHR) object</h2>
+                <ul>
+                    <li class="fragment">JavaScript API for fetching resources by URL</li>
+                    <li class="fragment">Asynchronous by default, even before promises were cool</li>
+                </ul>
+            </section>
+            <section>
+                <h2>The XHR object</h2>
+                <h3>Native JavaScript (ES6)</h3>
+                <pre><code data-trim>const request = new XMLHttpRequest();
+request.onreadystatechange = () => {
+    if (request.readyState === XMLHttpRequest.DONE) {
+        if (request.status === 200) {
+            alert(request.responseText);
+        } else {
+            alert('Ruh roh!');
+        }
+    }
+};
+
+request.open('POST', 'http://somedomain.com/api/thing/123');
+request.send();</code></pre>
+            </section>
+            <section>
+                <h2>The XHR object</h2>
+                <h3>jQuery equivalent</h3>
+                <pre><code data-trim>$.ajax({
+    'method': 'POST',
+    'url': 'http://somedomain.com/api/thing/123'
+}).done((data, status, xhr) => {
+    alert(xhr.responseText);
+}).fail((xhr, status, error) => {
+    alert('Ruh roh!');
+});</code></pre>
+            </section>
+        </section>
+
+        <section><h2>Making a CORS request</h2></section>
+        <section>
+            <h2>A &quot;simple&quot; CORS flowchart</h2>
+            <img class="stretch" src="/images/cors-request-flowchart.png">
+            <p><small>Source: <a href="https://en.wikipedia.org/wiki/File:Flowchart_showing_Simple_and_Preflight_XHR.svg">Wikipedia</a></small></p>
+
+            <aside class="notes">
+                <p>If you can't make out everything on this chart, that's ok. Over the next few slides we'll break the process down into the individual steps.</p>
+            </aside>
+        </section>
+        <section>
+            <section data-transition="slide-in fade-out">
+                <h2>Step by step</h2>
+                <ol>
+                    <li>Client makes XHR</li>
+                    <li>Browser sends pre-flight request</li>
+                    <li>Server responds with <code>Access-Control-*</code> headers</li>
+                    <li>Browser sends (or blocks) XHR request</li>
+                    <li>Server responds to request</li>
+                    <li>Client parses response normally</li>
+                </ol>
+            </section>
+            <section data-transition="fade-in fade-out">
+                <h2>Step by step</h2>
+                <ol class="emphasize">
+                    <li class="active">Client makes XHR</li>
+                    <li>Browser sends pre-flight request</li>
+                    <li>Server responds with <code>Access-Control-*</code> headers</li>
+                    <li>Browser sends (or blocks) XHR request</li>
+                    <li>Server responds to request</li>
+                    <li>Client parses response normally</li>
+                </ol>
+            </section>
+            <section data-transition="fade-in fade-out">
+                <h2>Step by step</h2>
+                <ol class="emphasize">
+                    <li>Client makes XHR</li>
+                    <li class="active">Browser sends pre-flight request</li>
+                    <li>Server responds with <code>Access-Control-*</code> headers</li>
+                    <li>Browser sends (or blocks) XHR request</li>
+                    <li>Server responds to request</li>
+                    <li>Client parses response normally</li>
+                </ol>
+            </section>
+            <section data-transition="fade-in fade-out">
+                <h2>Step by step</h2>
+                <ol class="emphasize">
+                    <li>Client makes XHR</li>
+                    <li>Browser sends pre-flight request</li>
+                    <li class="active">Server responds with <code>Access-Control-*</code> headers</li>
+                    <li>Browser sends (or blocks) XHR request</li>
+                    <li>Server responds to request</li>
+                    <li>Client parses response normally</li>
+                </ol>
+            </section>
+            <section data-transition="fade-in fade-out">
+                <h2>Step by step</h2>
+                <ol class="emphasize">
+                    <li>Client makes XHR</li>
+                    <li>Browser sends pre-flight request</li>
+                    <li>Server responds with <code>Access-Control-*</code> headers</li>
+                    <li class="active">Browser sends (or blocks) XHR request</li>
+                    <li>Server responds to request</li>
+                    <li>Client parses response normally</li>
+                </ol>
+            </section>
+            <section data-transition="fade-in fade-out">
+                <h2>Step by step</h2>
+                <ol class="emphasize">
+                    <li>Client makes XHR</li>
+                    <li>Browser sends pre-flight request</li>
+                    <li>Server responds with <code>Access-Control-*</code> headers</li>
+                    <li>Browser sends (or blocks) XHR request</li>
+                    <li class="active">Server responds to request</li>
+                    <li>Client parses response normally</li>
+                </ol>
+            </section>
+            <section data-transition="fade-in fade-out">
+                <h2>Step by step</h2>
+                <ol class="emphasize">
+                    <li>Client makes XHR</li>
+                    <li>Browser sends pre-flight request</li>
+                    <li>Server responds with <code>Access-Control-*</code> headers</li>
+                    <li>Browser sends (or blocks) XHR request</li>
+                    <li>Server responds to request</li>
+                    <li class="active">Client parses response normally</li>
+                </ol>
+            </section>
+        </section>
+        <section>
+            <section data-transition="none">
+                <h2>Step by step</h2>
+                <img class="stretch" src="/images/cors-request--step-1.png">
+
+                <aside class="notes">
+                </aside>
+            </section>
+            <section data-transition="none">
+                <h2>Step by step</h2>
+                <img class="stretch" src="/images/cors-request--step-2.png">
+
+                <aside class="notes">
+                </aside>
+            </section>
+            <section data-transition="none">
+                <h2>Step by step</h2>
+                <img class="stretch" src="/images/cors-request--step-3.png">
+
+                <aside class="notes">
+                </aside>
+            </section>
+            <section data-transition="none">
+                <h2>Step by step</h2>
+                <img class="stretch" src="/images/cors-request--step-4a.png">
+
+                <aside class="notes">
+                </aside>
+            </section>
+            <section data-transition="none">
+                <h2>Step by step</h2>
+                <img class="stretch" src="/images/cors-request--step-4b.png">
+
+                <aside class="notes">
+                </aside>
+            </section>
+        </section>
+
+
+        <section data-transition="slide-in">
+            <h2>Demo Time!</h2>
+        </section>
+
+
+        <section data-transition="slide-in">
+            <h2>CORS vs JSON-P</h2>
+            <h3 class="fragment">JSON-P &approx; &quot;CORS Lite&quot;</h3>
+        </section>
+        <section>
+            <h2>JSON-P in a nutshell</h2>
+
+            <aside class="notes">
+                <p>Before we compare CORS and JSON-P, it will be useful to provide a brief explanation of what JSON-P is and how it works.</p>
+                <p>JSON-P stands for &quot;JSON with Padding&quot;</p>
+            </aside>
+        </section>
+        <section>
+            <h2>JSON-P in a nutshell</h2>
+            <ul>
+                <li class="fragment"><code>&lt;script&gt;</code> tag on client page</li>
+                <li class="fragment">Server responds (in theory) with JSON object wrapped in function call</li>
+                <li class="fragment">Browser evaluates and executes response as plain JavaScript</li>
+            </ul>
+        </section>
+        <section>
+            <h2>A JSON-P example</h2>
+            <section>
+                <h3>Client</h3>
+                <pre><code data-trim>&lt;script
+    src=&quot;http://somedomain.com/api/get/1234?callback=evalMe&quot;&gt;
+&lt;/script&gt;</code></pre>
+                <aside class="notes">
+                    <p>The client contains a script tag in the HTML. The source URL looks like a typical REST endpoint, except for the callback.</p>
+                    <p>Specifying the callback in this way lets the server know that the response should be wrapped (or padded) in a function call named &quot;evalMe&quot;.</p>
+                </aside>
+            </section>
+            <section>
+                <h3>Server Response</h3>
+                <pre><code data-trim>evalMe({"key1": "val1", "key2": "val2"})</code></pre>
+
+                <aside class="notes">
+                    <p>This code will be executed by the browser as plain JavaScript. It's easy to see how something like this could be exploited if the external site becomes compromised.</p>
+                </aside>
+            </section>
+        </section>
+        <section>
+            <h2>CORS vs JSON-P</h2>
+            <table class="table-50-50">
+                <thead>
+                    <tr><th>CORS</th><th>JSON-P</th></tr>
+                </thead>
+                <tbody>
+                    <tr class="fragment">
+                        <td>All HTTP methods</td>
+                        <td>GET only</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td>All current browsers (Chrome, Firefox, IE 10+, etc)</td>
+                        <td>Current &amp; legacy browsers</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td>Resistant to XSS</td>
+                        <td>Vulnerable to XSS</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <aside class="notes">
+                <p>CORS lets you do more than just make a GET request. Any modern REST API simply can't work with JSON-P</p>
+                <p>JSON-P has the slight edge on browser support, but let's be real.</p>
+                <p>JSON-P basically says &quot;Give me some JS and I'll call eval() on it&quot;. CORS has more well-defined security mechanisms in place</p>
+            </aside>
+        </section>
+
+
+        <section>
+            <h2>But what about?</h2>
+
+            <aside class="notes">
+                <p>While it's true that it is nearly impossible to avoid CORS entirely, there are some cases in which you might need to find an alternative solution.</p>
+            </aside>
+        </section>
+        <section>
+            <h2>When CORS may not be the answer</h2>
+            <ul>
+                <li class="fragment">Your website needs to work offline</li>
+                <li class="fragment">Your website exists in a controlled environment with a single origin</li>
+                <li class="fragment">Your website exists in a controlled environment and only makes GET requests</li>
+                <li class="fragment">You're stuck in 2006 and need to support browsers like IE 7</li>
+            </ul>
+
+            <aside class="notes">
+                <p>If your website or application needs to function entirely offline or be distributed as a self-contained unit, everything will need to be served from one origin.</p>
+                <p>If your website exclusively makes GET requests and you have a degree of certainty that the server-side is secure, JSON-P is a valid alternative, though it provides little (if any) benefit over CORS.</p>
+                <p>If you work for an organization stuck supporting applications which require Windows XP, IE 7, or some other ancient technology... jobs.stackoverflow.com might be a good resource for you.</p>
+            </aside>
+        </section>
+        <section>
+            <img class="stretch" src="/images/sponsors.png">
+
+            <aside class="notes">
+                <p>If you're still working on things that require IE7 and other such ancient technologies, I'm pretty sure some of these places are hiring.</p>
+            </aside>
+        </section>
+
+
+        <section>
+            <h2>Questions?</h2>
+        </section>
+
+
+        <section>
+            <h2>Thank you!</h2>
+            <p>Slides and demos available at:</p>
+            <p><a href="https://github.com/chimericdream/cors-demystified">https://github.com/chimericdream/cors-demystified</a></p>
+
+            <aside class="notes">
+                <p>Feel free to download the slide deck and try the demos out for yourself. They will be available on my GitHub account later this afternoon.</p>
+            </aside>
+        </section>
+    </div>
+</div>
+
+<script src="/lib/js/head.min.js"></script>
+<script src="/js/reveal.js"></script>
+
+<script>
+    // More info about config & dependencies:
+    // - https://github.com/hakimel/reveal.js#configuration
+    // - https://github.com/hakimel/reveal.js#dependencies
+    Reveal.initialize({
+        'history': true,
+        'dependencies': [
+            {
+                'src': '/lib/js/classList.js',
+                'condition': () => {return !document.body.classList;}
+            },
+            {
+                'src': '/plugin/markdown/marked.js',
+                'condition': () => {
+                    return !!document.querySelector('[data-markdown]');
+                }
+            },
+            {
+                'src': '/plugin/markdown/markdown.js',
+                'condition': () => {
+                    return !!document.querySelector('[data-markdown]');
+                }
+            },
+            {'src': '/plugin/zoom-js/zoom.js', 'async': true},
+            {'src': '/socket.io/socket.io.js', 'async': true},
+            {'src': '/plugin/notes/notes.js', 'async': true},
+            {
+                'src': '/plugin/highlight/highlight.js',
+                'async': true,
+                'callback': () => {hljs.initHighlightingOnLoad();}
+            }
+        ]
+    });
+</script>
+</body>
+</html>
