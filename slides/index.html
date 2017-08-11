@@ -12,6 +12,16 @@
 
     <!-- Theme used for syntax highlighting of code -->
     <link rel="stylesheet" href="/lib/css/zenburn.css">
+    <!-- Printing and PDF exports -->
+    <script>
+        if (window.location.search.match(/print-pdf/gi)) {
+            var link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.type = 'text/css';
+            link.href = '/css/print/pdf.css';
+            document.getElementsByTagName('head')[0].appendChild(link);
+        }
+    </script>
 </head>
 <body>
 <div class="reveal">
@@ -204,11 +214,12 @@
 
         <section><h2>What is CORS?</h2></section>
         <section>
-            <h2>CORS is...</h2>
             <section>
+                <h2>CORS is...</h2>
                 <!-- Deliberately empty -->
             </section>
             <section>
+                <h2>CORS is...</h2>
                 <h3>Deceptively easy to summarize</h3>
                 <p class="fragment" data-fragment-index="1"><q>&quot;Cross-origin resource sharing (CORS) is a mechanism that allows restricted resources (e.g. fonts) on a web page to be requested from another domain outside the domain from which the first resource was served.&quot;</q></p>
                 <p class="fragment" data-fragment-index="1"><small>Source: <a href="https://en.wikipedia.org/wiki/Cross-origin_resource_sharing">Wikipedia</a></small></p>
@@ -219,6 +230,7 @@
                 </aside>
             </section>
             <section>
+                <h2>CORS is...</h2>
                 <h3>Easy to misunderstand</h3>
                 <p class="fragment" data-fragment-index="1"><q>&quot;Normcore truffaut waistcoat hexagon master cleanse. Slow-carb leggings whatever, flexitarian tumblr meh 8-bit unicorn franzen etsy wolf. Kombucha wayfarers dreamcatcher hella waistcoat, freegan photo booth bushwick shaman literally flannel synth.&quot;</q></p>
                 <p class="fragment" data-fragment-index="1"><small>Source: <a href="https://hipsum.co/?paras=1&type=hipster-centric">Hipster Ipsum</a></small></p>
@@ -228,6 +240,7 @@
                 </aside>
             </section>
             <section>
+                <h2>CORS is...</h2>
                 <h3>A pain in the rear</h3>
                 <p class="fragment" data-fragment-index="1"><q>&quot;CORS? Oh my god, I <em>hate</em> dealing with CORS issues.&quot;</q></p>
                 <p class="fragment" data-fragment-index="1"><small>Source: Every web developer ever</small></p>
@@ -237,6 +250,7 @@
                 </aside>
             </section>
             <section>
+                <h2>CORS is...</h2>
                 <h3>Better described as a behavior than a tool or technology</h3>
                 <p class="fragment">Cross-origin resource sharing is what happens when JavaScript code on one website asks another site for a thing.</p>
 
@@ -309,8 +323,8 @@
             </aside>
         </section>
         <section>
-            <h2>A couple important notes</h2>
             <section>
+                <h2>A couple important notes</h2>
                 <p><code>Client != Browser</code></p>
 
                 <aside class="notes">
@@ -320,6 +334,7 @@
                 </aside>
             </section>
             <section>
+                <h2>A couple important notes</h2>
                 <p>CORS is mostly passive.</p>
                 <p class="fragment">It's all about configuration.</p>
 
@@ -351,8 +366,8 @@
             </section>
         </section>
         <section>
-            <h2>What is an origin?</h2>
             <section data-transition="slide-in fade-out">
+                <h2>What is an origin?</h2>
                 <p><code>https://www.somewebsite.com:1234/</code></p>
 
                 <aside class="notes">
@@ -361,12 +376,15 @@
                 </aside>
             </section>
             <section data-transition="fade-in fade-out">
+                <h2>What is an origin?</h2>
                 <p><code><strong>https</strong><span class="faded">://www.somewebsite.com:1234/</span></code></p>
             </section>
             <section data-transition="fade-in fade-out">
+                <h2>What is an origin?</h2>
                 <p><code><span class="faded">https://</span><strong>www.somewebsite.com</strong><span class="faded">:1234/</span></code></p>
             </section>
             <section data-transition="fade-in slide-out">
+                <h2>What is an origin?</h2>
                 <p><code><span class="faded">https://www.somewebsite.com:</span><strong>1234</strong><span class="faded">/</span></code></p>
             </section>
         </section>
@@ -381,17 +399,19 @@
             </ul>
         </section>
         <section>
-            <h2>CORS request headers</h2>
             <section data-transition="slide-in fade-out">
-                <h3><code>Origin</code></h3>
+                <h2>CORS request headers</h2>
+                <h4><code>Origin</code></h4>
                 <p>The origin of the client making the request</p>
             </section>
             <section data-transition="fade-in fade-out">
-                <h3><code>Access-Control-Request-Method</code></h3>
+                <h2>CORS request headers</h2>
+                <h4><code>Access-Control-Request-Method</code></h4>
                 <p>The HTTP method (e.g. GET, POST, etc) the client is trying to use</p>
             </section>
             <section data-transition="fade-in slide-out">
-                <h3><code>Access-Control-Request-Headers</code></h3>
+                <h2>CORS request headers</h2>
+                <h4><code>Access-Control-Request-Headers</code></h4>
                 <p>A list of the headers to be sent from the client as part of the request</p>
             </section>
         </section>
@@ -406,9 +426,9 @@
             </ul>
         </section>
         <section>
-            <h2>CORS response headers</h2>
             <section data-transition="slide-in fade-out">
-                <h3><code>Access-Control-Allow-Origin</code></h3>
+                <h2>CORS response headers</h2>
+                <h4><code>Access-Control-Allow-Origin</code></h4>
                 <p>Either <code>*</code> or a list of origins allowed to make CORS requests to the destination</p>
 
                 <aside class="notes">
@@ -416,7 +436,8 @@
                 </aside>
             </section>
             <section data-transition="fade-in fade-out">
-                <h3><code>Access-Control-Allow-Credentials</code></h3>
+                <h2>CORS response headers</h2>
+                <h4><code>Access-Control-Allow-Credentials</code></h4>
                 <p>Whether or not the browser may send credentials (Auth header, cookies, etc) with the request</p>
 
                 <aside class="notes">
@@ -425,19 +446,23 @@
                 </aside>
             </section>
             <section data-transition="fade-in fade-out">
-                <h3><code>Access-Control-Expose-Headers</code></h3>
+                <h2>CORS response headers</h2>
+                <h4><code>Access-Control-Expose-Headers</code></h4>
                 <p>A list of headers which may be sent to the client with the response to the CORS request</p>
             </section>
             <section data-transition="fade-in fade-out">
-                <h3><code>Access-Control-Max-Age</code></h3>
+                <h2>CORS response headers</h2>
+                <h4><code>Access-Control-Max-Age</code></h4>
                 <p>The length of time the browser may cache the response to the pre-flight request</p>
             </section>
             <section data-transition="fade-in fade-out">
-                <h3><code>Access-Control-Allow-Methods</code></h3>
+                <h2>CORS response headers</h2>
+                <h4><code>Access-Control-Allow-Methods</code></h4>
                 <p>A list of HTTP methods (e.g. GET, POST, etc) which may be used for cross-origin requests</p>
             </section>
             <section data-transition="fade-in slide-out">
-                <h3><code>Access-Control-Allow-Headers</code></h3>
+                <h2>CORS response headers</h2>
+                <h4><code>Access-Control-Allow-Headers</code></h4>
                 <p>A list of headers which may be sent by the client with the request</p>
             </section>
         </section>
@@ -663,8 +688,8 @@ request.send();</code></pre>
             </ul>
         </section>
         <section>
-            <h2>A JSON-P example</h2>
             <section>
+                <h2>A JSON-P example</h2>
                 <h3>Client</h3>
                 <pre><code data-trim>&lt;script
     src=&quot;http://somedomain.com/api/get/1234?callback=evalMe&quot;&gt;
@@ -675,6 +700,7 @@ request.send();</code></pre>
                 </aside>
             </section>
             <section>
+                <h2>A JSON-P example</h2>
                 <h3>Server Response</h3>
                 <pre><code data-trim>evalMe({"key1": "val1", "key2": "val2"})</code></pre>
 

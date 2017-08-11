@@ -6,11 +6,11 @@
     opacity: 0.5;
 }
 
-ul.emphasize li {
+.emphasize > li {
     opacity: 0.5;
 }
 
-ul.emphasize li.active {
+.emphasize > li.active {
     opacity: 1.0;
 }
 
