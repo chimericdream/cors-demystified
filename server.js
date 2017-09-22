@@ -8,6 +8,8 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const favicon = require('serve-favicon');
 const serveStatic = require('serve-static');
+const http = require('http');
+const simpleRequest = require('request');
 
 const slides = express();
 const slidesServer = require('http').createServer(slides);
@@ -22,6 +24,7 @@ slidesServer.listen(8000, () => {
 
 const app1 = express();
 const app2 = express();
+const app3 = express();
 
 app1.use('/bower', serveStatic(path.join(__dirname, 'bower_components')))
     .use('/static', serveStatic(path.join(__dirname, 'demos/static')))
@@ -119,4 +122,122 @@ app1.listen(3000, () => {
 
 app2.listen(3001, () => {
     console.log('Demo API listening on port 3001')
+});
+
+app3.post('/me-not-here', [cors({
+    'origin': 'http://localhost:9001',
+    'methods': ['GET', 'POST'],
+    'allowedHeaders': ['Content-Type']
+}), bodyParser.json()], () => {
+    //foo
+});
+
+app3.head('/me-not-here', [cors({
+    'origin': 'http://localhost:9001',
+    'methods': ['GET', 'POST'],
+    'allowedHeaders': ['Content-Type']
+}), bodyParser.json()], () => {
+    //foo
+});
+
+app3.options('/', cors({
+    'origin': 'http://localhost:3000',
+    'methods': ['GET', 'POST'],
+    'allowedHeaders': ['Content-Type']
+}));
+
+app3.post('/', [cors({
+    'origin': 'http://localhost:3000',
+    'methods': ['GET', 'POST'],
+    'allowedHeaders': ['Content-Type']
+}), bodyParser.json()], (req, res) => {
+    let resData = {};
+
+    const data = req.body;
+    const reqParams = {
+        'uri': `http://${data.hostname}:${data.port}${data.path}`,
+        'headers': {
+            'Accept': 'application/json, text/javascript, */*; q=0.01',
+            'Accept-Encoding': 'gzip, deflate, br',
+            'Accept-Language': 'en-US,en;q=0.8',
+            'Connection': 'keep-alive',
+            'Content-Length': '60',
+            'Content-Type': 'application/json',
+            'Host': 'localhost:3002',
+            'Origin': 'http://localhost:3000',
+            'Referer': 'http://localhost:3000/',
+            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.90 Safari/537.36'
+        }
+    };
+
+    // const p1 = new Promise((resolve) => {
+    //     console.log('p1');
+    //     const params = reqParams;
+    //     params.method = 'OPTIONS';
+    //     simpleRequest(params)
+    //         .on('error', (err) => {
+    //             resData.options = err;
+    //             console.log('p1 failed');
+    //             resolve();
+    //         })
+    //         .on('response', (response) => {
+    //             resData.options = {
+    //                 'status': response.statusCode,
+    //                 'headers': response.headers,
+    //                 'response': response
+    //             };
+    //             console.log('p1 resolved');
+    //             resolve();
+    //         });
+    // });
+    //
+    const p2 = new Promise((resolve) => {
+        console.log('p2');
+        const params = reqParams;
+        params.method = 'HEAD';
+        simpleRequest(params)
+            .on('error', (err) => {
+                resData.head = err;
+                console.log('p2 failed');
+                resolve();
+            })
+            .on('response', (response) => {
+                resData.get = {
+                    'status': response.statusCode,
+                    'headers': response.headers,
+                    'response': response
+                };
+                console.log('p2 resolved');
+                resolve();
+            });
+    });
+
+    const p3 = new Promise((resolve) => {
+        console.log('p3');
+        const params = reqParams;
+        params.method = data.method;
+        simpleRequest(params)
+            .on('error', (err) => {
+                resData[data.method] = err;
+                console.log('p3 failed');
+                resolve();
+            })
+            .on('response', (response) => {
+                resData[data.method] = {
+                    'status': response.statusCode,
+                    'headers': response.headers,
+                    'response': response
+                };
+                console.log('p3 resolved');
+                resolve();
+            });
+    });
+
+    Promise.all([p2, p3]).then(() => {
+        res.json(resData);
+    });
+});
+
+app3.listen(3002, () => {
+    console.log('woot');
 });

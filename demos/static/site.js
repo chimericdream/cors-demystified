@@ -108,6 +108,7 @@ $(document).ready(() => {
             xhrOptions[$('input:checked').val()],
             {'data': JSON.stringify(xhrDefaults.data)}
         );
+        opts.url = 'http://localhost:3002/me-not-here';
         $('#response-data-block, #response-status, #response-xhr-block').html('');
         $.ajax(opts)
             .done((data, status, xhr) => {
@@ -115,6 +116,20 @@ $(document).ready(() => {
             })
             .fail((xhr, status, error) => {
                 displayResultBlock(error, status, xhr);
+
+                $.ajax({
+                    'url': 'http://localhost:3002/',
+                    'method': 'POST',
+                    'data': JSON.stringify({
+                        'hostname': 'localhost',
+                        'port': '3002',
+                        'path': '/me-not-here',
+                        'data': opts.data,
+                        'method': opts.method
+                    }),
+                    'dataType': 'json',
+                    'contentType': 'application/json'
+                });
             })
             .always(() => {
                 $('#page-tabs a[href="#response-content"]').tab('show');
